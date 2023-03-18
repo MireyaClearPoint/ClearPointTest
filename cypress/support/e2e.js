@@ -18,3 +18,21 @@ import './commands'
   
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+//Hide fetch/XHR requests 
+
+const app = window.top;
+if (!app.document.head.querySelector("[data-hide-command-log-request]")) {
+  const style = app.document.createElement("style");
+  const style1 = app.document.createElement("style");
+
+  style.innerHTML = ".command { display: none }";
+  style.setAttribute("data-hide-command-log-request", "");
+
+  app.document.head.appendChild(style);
+
+  style1.innerHTML =
+    ".command.command-name-step, .command-name-assert, .reporter .command-name-log { display: block }";
+  style.setAttribute("data-hide-command-log-request", "");
+  app.document.head.appendChild(style1);
+}
