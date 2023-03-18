@@ -1,0 +1,42 @@
+[
+  {
+    "description": "    Verify Todo List Funtionality",
+    "keyword": "Feature",
+    "name": "Todo List",
+    "line": 1,
+    "id": "todo-list",
+    "tags": [],
+    "uri": "TodoList.feature",
+    "elements": [
+      {
+        "id": "todo-list;user-supplies-correct-email-and-password",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "User supplies correct email and password",
+        "tags": [
+          {
+            "name": "@regression",
+            "line": 5
+          },
+          {
+            "name": "@smoking",
+            "line": 5
+          }
+        ],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I browse to account login page",
+            "result": {
+              "status": "undefined",
+              "duration": 45000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
