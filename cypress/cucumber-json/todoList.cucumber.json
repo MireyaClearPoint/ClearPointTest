@@ -32,7 +32,7 @@
             "name": "I browse to account login page",
             "result": {
               "status": "undefined",
-              "duration": 45000000
+              "duration": 99000000
             }
           }
         ]

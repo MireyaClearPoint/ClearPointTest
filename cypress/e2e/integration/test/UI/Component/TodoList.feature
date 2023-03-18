@@ -1,7 +1,10 @@
-Feature: Todo List 
+Feature: example.cypress.io
+  Scenario: visiting the frontpage
+     Given I browse to account login page
+    
+# Feature: Todo List 
 
-    Verify Todo List Funtionality
+#     Verify Todo List Funtionality
 
-    @regression @smoking
-    Scenario: User supplies correct email and password
-        Given I browse to account login page
+#     Scenario: User supplies correct email and password
+#         Given I browse to account login page
