@@ -14,25 +14,36 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
-  
+import "./commands";
+
+
+after(() => {
+  //clean up the state on after, to avoid duplication.
+    cy.log(Cypress.env("cleanUpCallBack"));
+    for (let callback of Cypress.env("cleanUpCallBack")) {
+      callback();
+    }
+});
+
+
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-//Hide fetch/XHR requests 
+//Hide fetch/XHR requests
 
-const app = window.top;
-if (!app.document.head.querySelector("[data-hide-command-log-request]")) {
-  const style = app.document.createElement("style");
-  const style1 = app.document.createElement("style");
+// const app = window.top;
+// if (!app.document.head.querySelector("[data-hide-command-log-request]")) {
+//   const style = app.document.createElement("style");
+//   const style1 = app.document.createElement("style");
 
-  style.innerHTML = ".command { display: none }";
-  style.setAttribute("data-hide-command-log-request", "");
+//   style.innerHTML = ".command { display: none }";
+//   style.setAttribute("data-hide-command-log-request", "");
 
-  app.document.head.appendChild(style);
+//   app.document.head.appendChild(style);
 
-  style1.innerHTML =
-    ".command.command-name-step, .command-name-assert, .reporter .command-name-log { display: block }";
-  style.setAttribute("data-hide-command-log-request", "");
-  app.document.head.appendChild(style1);
-}
+//   style1.innerHTML =
+//     ".command.command-name-step, .command-name-assert, .reporter .command-name-log { display: block }";
+//   style.setAttribute("data-hide-command-log-request", "");
+//   app.document.head.appendChild(style1);
+// }
