@@ -9,7 +9,7 @@ Feature: example.cypress.io
     Given the Todo List page is displayed
      And the Todo List currently has an "Apple" added
      When the customer removes the "Apple" from the List
-    #  Then the List not longer display that item
+     Then the List not longer display that item
 
 
  

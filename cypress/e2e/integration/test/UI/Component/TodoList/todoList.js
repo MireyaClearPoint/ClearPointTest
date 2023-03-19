@@ -27,6 +27,9 @@ Then("the Todo List currently has an {string} added", (item) => {
 
   When("the customer removes the {string} from the List",(item)=> {
     cy.wait(3000)
-    TodoPage.Removeitem(item)
-    
+    TodoPage.Removeitem(item)    
   });
+
+  Then("the List not longer display that item",(item) => {
+    TodoPage.verifyItemIsNotOnList(item)
+  })

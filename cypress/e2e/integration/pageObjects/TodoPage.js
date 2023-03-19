@@ -58,13 +58,11 @@ export default class TodoPage {
   }
 
   static verifyItemOnList(itemToSearch) {
-    cy.get(".table")
-      .find("tbody > tr > td")
-      .each((item) => {
-        if (item.text() == itemToSearch) {
-          cy.get(item).should("contain", itemToSearch);
-        }
-      });
+    cy.get(".table").should("contain", itemToSearch);
+  }
+
+  static verifyItemIsNotOnList(itemToSearch) {
+      cy.get(".table").should("not.contain", itemToSearch);
   }
 
   static AddItemPostRequest(item) {
@@ -99,13 +97,12 @@ export default class TodoPage {
     });
   }
 
-
-
   static Removeitem(itemToDelete) {
     cy.get(".table")
       .find("tbody > tr").contains("Apple").then((e)=> {
-        cy.wrap(e).parent().find('button').click()
-        cy.log(e)
+        cy.wrap(e).parent().find('button').should('contain', 'Mark as completed')
+        cy.wrap(e).parent().find('button').should("be.visible").click()
+
       })
   }
 } // end of class
