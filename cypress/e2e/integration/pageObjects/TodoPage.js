@@ -11,7 +11,14 @@ export default class TodoPage {
     const cleanUpCallBack = Cypress.env("cleanUpCallBack");
     cleanUpCallBack.push(callback);
     Cypress.env("cleanUpCallBack", cleanUpCallBack);
+    
   }
+
+  // static addObjectToEnv(callback) {
+  //   const objectToEnv = Cypress.env("itemId");
+  //   objectToEnv.push(callback);
+  //   Cypress.env("itemId", objectToEnv);
+  // }
 
   static InputTodoItem(TodoItem) {
     cy.get(this.descriptionInput)
@@ -30,29 +37,25 @@ export default class TodoPage {
       });
 
     cy.wait("@itemJustAdded").then((intercept) => {
-      Cypress.env("itemId", {x: intercept.response.body, y: intercept.request.body.description} );
 
-      cy.log(Cypress.env("itemId"));
+      Cypress.env("itemId", {
+        x: intercept.response.body,
+        y: intercept.request.body.description,
+      });
+
+      // this.addObjectToEnv({
+      //   x: intercept.response.body,
+      //   y: intercept.request.body.description,
+      // })
 
       this.addCleanUpCallBack(() => {
         cy.log(`CLEAN UP CALL BACK:`);
         this.delete(this.url_todoList, Cypress.env("itemId"));
       });
-
     });
   }
 
-  static AddItemPostRequest(item){
-    //cy.intercept("POST", this.url_todoList).as("itemJustAdded2");
-    this.post(item, this.url_todoList)
-
-      this.addCleanUpCallBack(() => {
-        cy.log(`CLEAN UP CALL BACK:`);
-        this.delete(this.url_todoList, Cypress.env("itemId2"));
-      });  
-  }
-
-  static delete(url, itemDesc){
+  static delete(url, itemDesc, index) {
     cy.log(`DELETE request using: ${url}`);
     cy.request({
       method: "PUT",
@@ -65,6 +68,24 @@ export default class TodoPage {
     }).then((response) => {
       cy.wrap(response).its("status").should("eq", 204);
     });
+
+  }
+
+  static AddItemPostRequest(item) {
+    this.post(item, this.url_todoList);
+
+    // cy.wrap(Cypress.env("itemId")).then((array)=> {
+    //   cy.log("*************444*");
+    //   const deleteObj = array[1]
+    //   cy.log(deleteObj)
+    //  cy.log("*************444*");
+    //  })
+
+    this.addCleanUpCallBack(() => {
+      cy.log(`CLEAN UP CALL BACK:`);
+     this.delete(this.url_todoList, Cypress.env("itemId2"));
+    });
+
   }
 
   static post(item, url) {
@@ -73,18 +94,31 @@ export default class TodoPage {
       method: "POST",
       url: `http://localhost:3002${url}`,
       body: {
-        description:item 
+        description: item,
       },
     }).then((response) => {
+      let descriptionBody = response.allRequestResponses[0]["Request Body"];
 
-      cy.log("Response")
-      cy.log(response)
-      Cypress.env("itemId2", response.body);
+      Cypress.env("itemId2", {
+        x: response.body,
+        y: JSON.parse(descriptionBody).description,
+      });
+
+      // cy.log("**************");
+      // cy.log(Cypress.env("itemId"));
+      // cy.log("**************");
+
+
+      // this.addObjectToEnv({
+      //   x: response.body,
+      //   y: JSON.parse(descriptionBody).description,
+      // })
 
       cy.wrap(response).its("status").should("eq", 201);
-      return response.body
     });
   }
+
+
 
   static verifyItemOnList(itemToSearch) {
     cy.get(".table")
@@ -95,9 +129,9 @@ export default class TodoPage {
         }
       });
 
-      cy.log("ALOOOO::::::::")
-      cy.log(Cypress.env("itemId"));
-
-
+    // cy.log("ALOOOO::::::::")
+    // cy.log(Cypress.env("itemId"));
   }
+
+
 } // end of class

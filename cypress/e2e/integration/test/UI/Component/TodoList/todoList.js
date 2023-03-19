@@ -19,14 +19,12 @@ Then("a {string} is added to the list", (item) => {
   TodoPage.verifyItemOnList(item);
 });
 
-Given("the Todo List currently has an {string} added", (item) => {
+Then("the Todo List currently has an {string} added", (item) => {
   TodoPage.AddItemPostRequest(item)
 
 
 
     cy.reload()
-    cy.reload()
-    cy.wait(5000)
     cy.reload()
   });
 
