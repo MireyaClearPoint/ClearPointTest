@@ -24,7 +24,7 @@ export default class TodoPage {
   static AddItemAction() {
     cy.get(this.addButton)
       .should("be.visible").should('contain', 'Add Item')
-      
+
         cy.get(this.addButton).then(() => {
         cy.intercept("POST", this.url_todoList).as("itemJustAdded");
         cy.get(this.addButton).click();
@@ -57,13 +57,26 @@ export default class TodoPage {
     });
   }
 
+  static verifyItemOnList(itemToSearch) {
+    cy.get(".table")
+      .find("tbody > tr > td")
+      .each((item) => {
+        if (item.text() == itemToSearch) {
+          cy.get(item).should("contain", itemToSearch);
+        }
+      });
+  }
+
   static AddItemPostRequest(item) {
     this.post(item, this.url_todoList);
+    cy.reload()
+    this.verifyItemOnList(item);
 
     this.addCleanUpCallBack(() => {
       cy.log(`CLEAN UP CALL BACK:`);
       this.delete(this.url_todoList, Cypress.env("itemId2"));
     });
+
   }
 
   static post(item, url) {
@@ -86,15 +99,7 @@ export default class TodoPage {
     });
   }
 
-  static verifyItemOnList(itemToSearch) {
-    cy.get(".table")
-      .find("tbody > tr > td")
-      .each((item) => {
-        if (item.text() == itemToSearch) {
-          cy.get(item).should("contain", itemToSearch);
-        }
-      });
-  }
+
 
   static Removeitem(itemToDelete) {
     cy.get(".table")
