@@ -11,14 +11,7 @@ export default class TodoPage {
     const cleanUpCallBack = Cypress.env("cleanUpCallBack");
     cleanUpCallBack.push(callback);
     Cypress.env("cleanUpCallBack", cleanUpCallBack);
-    
   }
-
-  // static addObjectToEnv(callback) {
-  //   const objectToEnv = Cypress.env("itemId");
-  //   objectToEnv.push(callback);
-  //   Cypress.env("itemId", objectToEnv);
-  // }
 
   static InputTodoItem(TodoItem) {
     cy.get(this.descriptionInput)
@@ -37,17 +30,10 @@ export default class TodoPage {
       });
 
     cy.wait("@itemJustAdded").then((intercept) => {
-
       Cypress.env("itemId", {
         x: intercept.response.body,
         y: intercept.request.body.description,
       });
-
-      // this.addObjectToEnv({
-      //   x: intercept.response.body,
-      //   y: intercept.request.body.description,
-      // })
-
       this.addCleanUpCallBack(() => {
         cy.log(`CLEAN UP CALL BACK:`);
         this.delete(this.url_todoList, Cypress.env("itemId"));
@@ -68,24 +54,15 @@ export default class TodoPage {
     }).then((response) => {
       cy.wrap(response).its("status").should("eq", 204);
     });
-
   }
 
   static AddItemPostRequest(item) {
     this.post(item, this.url_todoList);
 
-    // cy.wrap(Cypress.env("itemId")).then((array)=> {
-    //   cy.log("*************444*");
-    //   const deleteObj = array[1]
-    //   cy.log(deleteObj)
-    //  cy.log("*************444*");
-    //  })
-
     this.addCleanUpCallBack(() => {
       cy.log(`CLEAN UP CALL BACK:`);
-     this.delete(this.url_todoList, Cypress.env("itemId2"));
+      this.delete(this.url_todoList, Cypress.env("itemId2"));
     });
-
   }
 
   static post(item, url) {
@@ -104,21 +81,9 @@ export default class TodoPage {
         y: JSON.parse(descriptionBody).description,
       });
 
-      // cy.log("**************");
-      // cy.log(Cypress.env("itemId"));
-      // cy.log("**************");
-
-
-      // this.addObjectToEnv({
-      //   x: response.body,
-      //   y: JSON.parse(descriptionBody).description,
-      // })
-
       cy.wrap(response).its("status").should("eq", 201);
     });
   }
-
-
 
   static verifyItemOnList(itemToSearch) {
     cy.get(".table")
@@ -128,10 +93,5 @@ export default class TodoPage {
           cy.get(item).should("contain", itemToSearch);
         }
       });
-
-    // cy.log("ALOOOO::::::::")
-    // cy.log(Cypress.env("itemId"));
   }
-
-
 } // end of class
