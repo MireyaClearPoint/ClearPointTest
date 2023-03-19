@@ -21,10 +21,13 @@ Then("a {string} is added to the list", (item) => {
 
 Then("the Todo List currently has an {string} added", (item) => {
   TodoPage.AddItemPostRequest(item)
-
-
-
-    cy.reload()
     cy.reload()
   });
 
+
+  When("the customer removes the {string} from the List",(item)=> {
+    cy.wait(3000)
+    TodoPage.Removeitem(item)
+    
+
+  });

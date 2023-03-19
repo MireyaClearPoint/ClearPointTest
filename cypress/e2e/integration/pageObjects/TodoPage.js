@@ -23,8 +23,9 @@ export default class TodoPage {
 
   static AddItemAction() {
     cy.get(this.addButton)
-      .should("be.visible")
-      .then(() => {
+      .should("be.visible").should('contain', 'Add Item')
+      
+        cy.get(this.addButton).then(() => {
         cy.intercept("POST", this.url_todoList).as("itemJustAdded");
         cy.get(this.addButton).click();
       });
@@ -93,5 +94,13 @@ export default class TodoPage {
           cy.get(item).should("contain", itemToSearch);
         }
       });
+  }
+
+  static Removeitem(itemToDelete) {
+    cy.get(".table")
+      .find("tbody > tr").contains("Apple").then((e)=> {
+        cy.wrap(e).parent().find('button').click()
+        cy.log(e)
+      })
   }
 } // end of class
