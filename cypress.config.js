@@ -10,6 +10,7 @@ export default defineConfig({
       cleanUpCallBack: [],
       itemId: [],
       itemId2: [],
+      apiIdToDelete: ""
     },
     viewportWidth: 1000,
     viewportHeight: 700,
