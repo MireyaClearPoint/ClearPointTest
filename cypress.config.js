@@ -8,7 +8,7 @@ export default defineConfig({
     specPattern: "**/*.feature",
     env: {
       cleanUpCallBack: [],
-      itemId: "itemId",
+      itemId: {},
       itemId2: "itemId2",
     },
     viewportWidth: 1000,
