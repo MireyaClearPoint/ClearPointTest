@@ -29,5 +29,4 @@ Then("the Todo List currently has an {string} added", (item) => {
     cy.wait(3000)
     TodoPage.Removeitem(item)
     
-
   });
