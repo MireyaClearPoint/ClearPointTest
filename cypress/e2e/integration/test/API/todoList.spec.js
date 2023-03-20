@@ -8,14 +8,10 @@ describe("API test", () => {
     description: TodoChore,
   };
 
-  let jsonBody3 = {
-    description: "Walk rocky",
-    description: "Drink Water",
-  };
-
-let jsonBody4 = {
-    description: "Drink Water",
-  };
+  let jsonBody3 = [
+    { description: "Walk rocky" },
+    { description: "Drink Water" },
+  ];
 
   before(() => {
     cy.visit("http://localhost:3000");
@@ -112,7 +108,6 @@ let jsonBody4 = {
           description: jsonBody.description,
         },
       }).then((response) => {
-        console.log(response);
         expect(response.status).to.eq(409);
         expect(response.body).to.eq(
           "A todo item with description already exists"
@@ -122,16 +117,15 @@ let jsonBody4 = {
   }); // end of POST
 
   context("PUT /api/todoItems/{id}", function () {
-
     it("delete a todo item", () => {
-      TodoListAPIBase.post(apiTodoList, jsonBody3).then((response) => {
+      TodoListAPIBase.post(apiTodoList, jsonBody3[0]).then((response) => {
         cy.request({
           method: "PUT",
           url: `${apiTodoList}${response.body}`,
           failOnStatusCode: false,
           body: {
             id: response.body,
-            description: jsonBody3.description,
+            description: jsonBody3[0].description,
             isCompleted: true,
           },
         }).then((response) => {
@@ -140,12 +134,8 @@ let jsonBody4 = {
       });
     });
 
-
-
     it("delete a non existant item", () => {
-      TodoListAPIBase.post(apiTodoList, jsonBody4).then((response) => {
-
-
+      TodoListAPIBase.post(apiTodoList, jsonBody3[1]).then((response) => {
         cy.request({
           method: "PUT",
           url: `${apiTodoList}${response.body}`,
@@ -154,23 +144,11 @@ let jsonBody4 = {
             id: response.body,
             description: "JJ",
             isCompleted: true,
-
           },
         }).then((response) => {
-          console.log("Innna")
-          console.log(response)
-          console.log("Innna")
           expect(response.status).to.eq(404);
         });
       });
-
     });
-
-
-
-
-
-
-
   });
 }); // end of describe block
