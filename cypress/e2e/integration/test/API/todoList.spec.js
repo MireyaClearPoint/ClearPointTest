@@ -1,7 +1,6 @@
 import TodoListAPIBase from "../../../../support/api/todoListAPIBase";
 import { faker } from "@faker-js/faker";
 
-
 const apiTodoList = "http://localhost:3002/api/todoItems/";
 const TodoChore = "Feed my cat";
 describe("API test", () => {
@@ -11,6 +10,11 @@ describe("API test", () => {
 
   let jsonBody3 = {
     description: "Walk rocky",
+    description: "Drink Water",
+  };
+
+let jsonBody4 = {
+    description: "Drink Water",
   };
 
   before(() => {
@@ -115,5 +119,58 @@ describe("API test", () => {
         );
       });
     });
+  }); // end of POST
+
+  context("PUT /api/todoItems/{id}", function () {
+
+    it("delete a todo item", () => {
+      TodoListAPIBase.post(apiTodoList, jsonBody3).then((response) => {
+        cy.request({
+          method: "PUT",
+          url: `${apiTodoList}${response.body}`,
+          failOnStatusCode: false,
+          body: {
+            id: response.body,
+            description: jsonBody3.description,
+            isCompleted: true,
+          },
+        }).then((response) => {
+          expect(response.status).to.eq(204);
+        });
+      });
+    });
+
+
+
+    it("delete a non existant item", () => {
+      TodoListAPIBase.post(apiTodoList, jsonBody4).then((response) => {
+
+
+        cy.request({
+          method: "PUT",
+          url: `${apiTodoList}${response.body}`,
+          failOnStatusCode: false,
+          body: {
+            id: response.body,
+            description: "JJ",
+            isCompleted: true,
+
+          },
+        }).then((response) => {
+          console.log("Innna")
+          console.log(response)
+          console.log("Innna")
+          expect(response.status).to.eq(404);
+        });
+      });
+
+    });
+
+
+
+
+
+
+
   });
 }); // end of describe block
