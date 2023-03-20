@@ -10,11 +10,11 @@ export default defineConfig({
       cleanUpCallBack: [],
       itemId: [],
       itemId2: [],
-      apiIdToDelete: "to be set"
+      apiIdToDelete: "to be set",
+      TodoAmount: 0
     },
     viewportWidth: 1000,
     viewportHeight: 700,
-    numTestsKeptInMemory: 0,
     async setupNodeEvents(on, config) {
       // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
       await cucumber.addCucumberPreprocessorPlugin(on, config);
