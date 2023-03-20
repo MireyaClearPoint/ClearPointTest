@@ -1,12 +1,8 @@
 import TodoListAPIBase from "../../../../support/api/todoListAPIBase";
 import { faker } from "@faker-js/faker";
 
-// para el post
-// expect(response.body).length.to.be.greaterThan(1);
-//  expect(response.body[0]).to.have.property('description', 'Water')
 
 const apiTodoList = "http://localhost:3002/api/todoItems/";
-
 const TodoChore = "Feed my cat";
 describe("API test", () => {
   let jsonBody = {
