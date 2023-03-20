@@ -5,7 +5,7 @@ import { createEsbuildPlugin } from "@badeball/cypress-cucumber-preprocessor/esb
 
 export default defineConfig({
   e2e: {
-    specPattern: ["**/*.{feature,features}", "**/API/**/*.{js,spec}"],
+    specPattern:["**/*.{feature,features}", "cypress/e2e/integration/**/todoList.spec.js" ],  
     env: {
       cleanUpCallBack: [],
       itemId: [],
