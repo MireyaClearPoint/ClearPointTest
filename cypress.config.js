@@ -11,7 +11,8 @@ export default defineConfig({
       itemId: [],
       itemId2: [],
       apiIdToDelete: "to be set",
-      TodoAmount: 0
+      todoAmount: 0,
+      arrayToDelete:{},
     },
     viewportWidth: 1000,
     viewportHeight: 700,

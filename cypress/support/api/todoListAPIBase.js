@@ -1,9 +1,21 @@
 // I usually write the Base API here for scalability and reuse in large project
-// Althought not needed in this small project, it is a good way to show how the POM design pattern 
+// Althought not needed in this small project, it is a good way to show how the POM design pattern
 //and this scaffolding approach to help us to mantain large projects and keep it DRY.
 
 export default class TodoListAPIBase {
-    
+
+  // This function keep the record of todo list at a minimun of 5,
+  //then it deletes all the item upon re-run;
+  static CleanAllTodos(apiTodoList, todoList) {
+    todoList.forEach((obj) => {
+      obj.isCompleted = true;
+    });
+
+    for (const i in todoList) {
+      this.put(apiTodoList + todoList[i].id, todoList[i]);
+    }
+  }
+
   static post(url, jsonBody = null) {
     cy.request({
       method: "POST",
@@ -44,10 +56,8 @@ export default class TodoListAPIBase {
       },
     }).then((response) => {
       cy.wrap(response).as("putResponse");
-      cy.wrap(response).its("status").should("eq", 204);// No content response
+      cy.wrap(response).its("status").should("eq", 204); // No content response
     });
     return cy.get("@putResponse");
   }
-
-
 }
