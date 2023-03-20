@@ -13,6 +13,15 @@ describe("API test", () => {
     description: TodoChore,
   };
 
+  let jsonBody3 = {
+    description: "Walk rocky",
+  };
+
+  before(() => {
+    cy.visit("http://localhost:3000");
+    cy.reload();
+  });
+
   // if removed this after() block test would failed the second time it runs
   //because duplicate records are not allow in the Todo List
   after(() => {
@@ -23,21 +32,17 @@ describe("API test", () => {
     };
 
     TodoListAPIBase.put(apiTodoList + Cypress.env("apiIdToDelete"), jsonBody2);
-    if(Cypress.env("todoAmount") > 3){
-    TodoListAPIBase.CleanAllTodos(apiTodoList, Cypress.env("arrayToDelete"));
+
+    // delete when list is longer than 3 to keep it short
+    if (Cypress.env("todoAmount") > 3) {
+      TodoListAPIBase.CleanAllTodos(apiTodoList, Cypress.env("arrayToDelete"));
     }
-
-
-
-
-
   }); // end of after
 
   context("GET /todoItems", function () {
     it("verifies that the API returns the expected response", () => {
-      // Post jsonBody to the app first so to have something in there to start with.
       TodoListAPIBase.post(apiTodoList, jsonBody);
-      //intercept because I will need the ID to delete afterwards to cleanup to re-run without issues later on.
+
       cy.request("GET", apiTodoList)
         .then((response) => {
           expect(response.status).to.eq(200);
@@ -55,14 +60,12 @@ describe("API test", () => {
             "apiIdToDelete",
             response.body[response.body.length - 1].id
           );
-          Cypress.env("todoAmount", response.body.length)
+          Cypress.env("todoAmount", response.body.length);
         });
     });
   }); // end of GET
 
   context("POST /api/todoItems", function () {
-
-
     it("creates a new todo item", () => {
       //call different members of my fake family...
       const todo = `Call ${faker.name.firstName()}`;
@@ -71,7 +74,6 @@ describe("API test", () => {
       }).then((response, request) => {
         expect(response.status).to.eq(201);
         expect(response.body).to.be.an("string");
-    
       });
 
       cy.intercept("GET", "/api/todoItems").as("newIdCreate");
@@ -84,18 +86,19 @@ describe("API test", () => {
       });
     });
 
-
     it("error when invalid field sent - [Bad Request]", () => {
       cy.request({
         method: "POST",
         url: `${apiTodoList}`,
         failOnStatusCode: false,
         body: {
-          notAUserField: "not a user field",
+          notdescriptionField: "not a description field",
         },
-      }).then((response, request) => {
+      }).then((response) => {
         expect(response.status).to.eq(400);
-        expect(response.body.title).to.eq("One or more validation errors occurred.")
+        expect(response.body.title).to.eq(
+          "One or more validation errors occurred."
+        );
         // expect(response.body.errors.length).to.eq(1);
       });
     });
@@ -106,20 +109,15 @@ describe("API test", () => {
         url: `${apiTodoList}`,
         failOnStatusCode: false,
         body: {
-          notAUserField: "not a user field",
+          description: jsonBody.description,
         },
-      }).then((response, request) => {
-        expect(response.status).to.eq(400);
-        expect(response.body.title).to.eq("One or more validation errors occurred.")
-        // expect(response.body.errors.length).to.eq(1);
+      }).then((response) => {
+        console.log(response);
+        expect(response.status).to.eq(409);
+        expect(response.body).to.eq(
+          "A todo item with description already exists"
+        );
       });
     });
-
-
-
-
   });
-
-
 }); // end of describe block
-
